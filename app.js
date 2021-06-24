@@ -70,6 +70,20 @@ function undraw(){
 //make the tetro move down every second
 timerId = setInterval(moveDown, 1000)
 
+//assign function to keyCodes
+function control(e) {
+    if(e.keyCode === 37) {
+        moveLeft()
+    } else if (e.keyCode === 38) {
+        rotate()
+    } else if  (e.keyCode === 39) {
+        moveRight()
+    } else if (e.keyCode  === 40) {
+        moveDown()
+    }
+}
+document.addEventListener('keyup', control)
+
 //Move down function
 function moveDown(){
     undraw()
@@ -101,7 +115,36 @@ function moveLeft(){
     if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
         currentPosition +=1
     }
+
+    draw()
 }
+
+//move the tetro right, unless is at the edge or there is a block
+function moveRight() {
+    undraw()
+    const isAtTheRightEdge = current.some(index => (currentPosition + index)% width === width -1)
+
+    if(!isAtTheRightEdge) currentPosition +=1
+    
+    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+        currentPosition -=1
+    }
+
+    draw()
+
+}
+
+//rotate the tetro
+function rotate() {
+    undraw()
+    currentRotation ++
+    if( currentRotation === current.length) { //if the current rotation gets to 4, make it go back
+        currentRotation = 0
+    }
+    current = theTetrominoes[random][currentRotation]
+    draw()
+}
+
 
 
 
